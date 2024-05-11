@@ -1,0 +1,133 @@
+ @charset "UTF-8"; 
+/*  #navbar-memberbox{margin-left:75%;}  */
+ #global {
+ 	width: 1100px;
+	text-align: end;
+	padding-top: 5px;
+ 	margin: auto;
+ }
+.navbar{ background-color:white!important;} 
+.nav{ margin: 0px auto 0px; } 
+ #site-map{margin: 0 auto;} 
+body { 
+  display: grid;
+  grid-template-areas: 
+    "header header header"
+    "nav article ads"
+    "footer footer footer";
+  grid-template-rows: 120px 1fr 90px;
+  grid-template-columns: 20% 1fr 20%;
+  grid-gap: 10px;
+  height: 100vh;
+  margin: 0;
+  }
+article, nav, div {
+  padding: 0px;
+  background: white;
+}
+footer {
+  padding: 0px;
+  background: #d5b59c;
+  
+}
+#footer-text{ background: #d5b59c!important; }
+header{width:100%; top: 0; background: white; z-index: 9999;}
+
+#pageHeader {
+  grid-area: header;
+  position: sticky;
+}
+.underline {
+	border-bottom: 1px solid #aaa;
+/* 	border-bottom: 1px solid #594226; */
+/* 	box-shadow: 0 10px 10px #9c866a; */
+	width: 1200px;
+ 	margin: auto;
+}
+#pageFooter {
+  grid-area: footer;
+  background: #ef4f4f;}
+#pageFooter.d-flex justify-content-end{background: #d5b59c;}
+#mainArticle { 
+  grid-area: article;  
+  margin-top: 30px;
+  }
+  
+#navbar-memberbox>a:link,#navbar-memberbox>a:visited {
+	text-decoration: none;
+	color: #000;
+}
+#navbar-memberbox>a:hover,#navbar-memberbox>a:active {
+	text-decoration: underline;	
+	color: #eb2d2d;
+}
+
+button.navbar-toggler{
+	margin-right: 10px;
+	margin-top: 30px;
+	height:40px;
+}
+.menuItem {
+	font-size: 18px;
+	text-align: center;
+	padding-top: 35px;
+}
+#mainNav { 
+  grid-area: nav; 
+  }
+#siteAds { 
+  grid-area: ads; 
+  }
+#footer_content{
+ font-size:small;
+  background: #ef4f4f;
+ }
+ #footer_content>.col{
+ background: #ef4f4f;
+ }
+ .nav-link{color:black; 
+ font-weight: bold; } 
+ 
+/*   .nav-item{ */
+/*   width:115px;} */
+ 
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #dc3545;
+    background-color: #e9ecef;
+    border-bottom:1px solid red
+}
+.nav-link {
+    color: #adb5bd;
+    font-weight: bold;
+    background-color: #f8f9fa;
+}
+.nav-pills .nav-link {
+    border-radius: 0rem;
+}
+.card{    border: 4px solid rgb(240 17 17 / 13%);}
+
+.btn-outline-success {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+.container{width:1200px; max-width:none!important;}
+
+.navbar-light .navbar-toggler {
+   
+    border-color: white;
+}
+
+/* 넓이이와 높이 설정 */
+.w-900{
+	width: 900px;
+}
+.w-950{
+	width: 950px;
+}
+.w-500{
+	width: 500px;
+}
+.h-500{
+	height: 500px;
+}
+  

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itwillbs.dongbaekcinema.mapper.MemberMapper">
+<!--   <cache-ref namespace=""/> -->
+
+	<!-- 아이디 중복 확인 -->
+	<select id="idCheck" parameterType="String" resultType="int">
+		SELECT COUNT(member_id) FROM MEMBERS WHERE member_id = #{member_id}
+	</select>
+
+	<!-- 회원가입 -INSERT -->
+	<!--  -->
+	<insert id="insertMember" parameterType="com.itwillbs.dongbaekcinema.vo.MemberVO">
+		INSERT
+			INTO MEMBERS
+			VALUES (
+				#{member_id}
+				, #{member_pass}
+				, #{member_name}
+				, #{member_email}
+				, #{member_birth}
+				, now() 			-- {member_date}
+				, #{member_phone}
+				, #{member_status} -- ENUM 타입 에서 String 타입으로 변경 
+				, #{member_agree_marketing}
+				, #{member_withdrawl}
+				, #{member_type} -- CHECK 제약 조건 
+				, #{member_like_genre} -- NULL
+				, 1
+				, 'BRONZE'
+			)
+	</insert>
+	
+	
+	
+	<!-- 로그인, 관리자 페이지 - 회원 한명 id 조회   -->
+	<select id="selectMember" resultType="com.itwillbs.dongbaekcinema.vo.MemberVO">
+		SELECT * 
+		FROM MEMBERS
+		WHERE member_id = #{member_id}
+			AND member_type != '비회원'
+	</select>
+	
+	<!-- 관리자 - 회원상세 멤버십 0626정의효 -->
+	<select id="selectMemberWithGradeName" resultType="com.itwillbs.dongbaekcinema.vo.MemberVO">
+			SELECT
+			    m.member_id
+			    , m.*
+			    , g.*
+			    , (
+			        SELECT IFNULL(SUM(DISTINCT payment_total_price), 0) 
+			        FROM BUY_DETAIL
+			        WHERE
+			            member_id = #{member_id}
+			            AND payment_datetime >= CONCAT(YEAR(now()), '-01-01')
+			            AND payment_status = '결제완료'
+			    ) AS total_payment
+			FROM
+			    MEMBERS m  
+		    LEFT JOIN 
+		        GRADES g 
+		    ON
+		        m.grade_name = g.grade_name  
+		    LEFT JOIN 
+		        ORDERS o
+		    ON
+		        o.member_id = m.member_id 
+		    LEFT JOIN
+		        PAYMENTS p
+		    ON
+		        p.order_num = o.order_num 
+			WHERE
+			    m.member_id = #{member_id}
+		    AND
+			    m.member_type != '비회원'
+			GROUP BY
+			    m.member_id
+
+	</select>
+			
+	<!-- 로그인 작업 - member_id로 조회, member_pass 받아오기 -->
+	<select id="selectPasswd" resultType="String">
+		SELECT member_pass 
+			FROM MEMBERS
+			WHERE
+				member_id = #{member_id}
+				AND member_type != '비회원'
+	</select>
+	
+	<!-- (member_phone)이 중복 확인 - SELECT -->
+	<select id="selectMemberByPhone" resultType="com.itwillbs.dongbaekcinema.vo.MemberVO">
+		SELECT *
+			FROM MEMBERS
+			WHERE
+				member_phone = #{member_phone}
+	</select>
+	
+	
+	<!-- 비회원 로그인(가입) 작업을 위한 메서드 -->
+	<insert id="insertNoMember">
+		INSERT
+			INTO MEMBERS
+			VALUES (
+				#{member_phone}
+				, #{member_pass}
+				, #{member_name}
+				, #{member_email}
+				, #{member_birth}
+				, now() 			-- {member_date}
+				, #{member_phone}
+				, '활동'
+				, 0					-- 0이 뭐였지
+				, #{member_withdrawl}
+				, '비회원'
+				, '선택 안함' -- NULL
+				, 1
+				, 'NONE'
+			)
+	</insert>
+
+	
+	<!-- 비회원 로그인(정보조회) 작업 -->
+	<select id="selectNoMemberPasswd" resultType="String">
+		SELECT member_pass
+			FROM MEMBERS
+			WHERE member_name = #{member_name}
+				AND member_id = #{member_phone}
+	</select>
+
+
+
+	<!-- 0621 정의효 관리자 - 멤버 - 검색및조회 확인 -->
+	<select id="selectMemberList" resultType="com.itwillbs.dongbaekcinema.vo.MemberVO">
+		SELECT * 
+			FROM MEMBERS
+			<if test="!memberSearchKeyword.equals('')">
+				WHERE
+				<choose>
+					<when test="memberSearchType.equals('member_name')">
+						member_name LIKE '%${memberSearchKeyword}%'
+					</when>
+					<when test="memberSearchType.equals('member_id')">
+						member_id LIKE '%${memberSearchKeyword}%'
+					</when>
+					<when test="memberSearchType.equals('grade_name')">
+						grade_name LIKE '%${memberSearchKeyword}%'
+					</when>
+				</choose>
+			</if>
+			ORDER BY
+				member_date DESC
+			LIMIT
+				#{startRow}
+				, #{listLimit}
+	</select>
+	
+	<!-- 전체 글 목록 갯수 조회 - SELECT  0621정의효- 페이징처리중-->
+	<select id="selectMemberListCount" resultType="int">
+    SELECT COUNT(*)
+	    FROM MEMBERS
+	    <if test="!memberSearchKeyword.equals('')">
+	        WHERE
+	        <choose>
+	            <when test="memberSearchType.equals('member_name')">
+	                member_name LIKE '%${memberSearchKeyword}%'
+	            </when>
+	            <when test="memberSearchType.equals('member_id')">
+	                member_id LIKE '%${memberSearchKeyword}%'
+	            </when>
+	            <when test="memberSearchType.equals('grade_name')">
+	                grade_name LIKE '%${memberSearchKeyword}%'
+	            </when>
+	        </choose>
+	    </if>
+	</select>
+	
+	
+	<!-- 0619정의효 멤버 grade 변경 -->
+	<update id="changeMemberGrade">
+	   UPDATE 
+	   		MEMBERS m
+	  JOIN 
+	  		GRADES g 
+	  ON 
+	  		g.grade_name = m.grade_name
+	  SET 
+	  		m.grade_name = #{grade_name}  
+	 WHERE
+	   m.member_id = #{member_id};
+	</update>
+	
+	<!-- 0619정의효 멤버 status변경 -->
+	<update id="changeMemberStatus">
+		UPDATE MEMBERS
+		SET
+			member_status = #{member_status}
+		WHERE
+			member_id = #{member_id}
+	</update>
+	
+	<!-- 0619정의효 멤버 삭제 -->
+	<delete id="memberDelete">
+		DELETE 
+			FROM
+				MEMBERS
+			WHERE 
+				member_id = #{member_id} 
+	</delete>
+	
+	
+	<!-- 비밀번호 수정 -->
+	<update id="updateMember">
+		UPDATE MEMBERS
+		SET member_pass = #{member_pass}
+		WHERE member_id = #{member_id}
+	</update>
+	
+	<!-- 아이디 찾기 -->
+	<select id="findMemberId" resultType="String">
+		SELECT member_id
+			FROM MEMBERS
+			WHERE
+				member_name = #{member_name}
+				AND member_phone = #{member_phone}
+	</select>
+	
+	<!-- 비밀번호 찾기  -->
+	<select id="findMemberPass" resultType="String">
+		SELECT member_name
+			FROM MEMBERS
+			WHERE
+				member_id = #{member_id}
+				AND member_phone = #{member_phone}
+	</select>
+	
+	<!--비밀번호 찾기 - 변경 -->
+	<update id="updatePassword">
+		UPDATE MEMBERS
+			SET
+				member_pass = #{memberNewPasswd}
+			WHERE
+				member_id = #{member_id}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

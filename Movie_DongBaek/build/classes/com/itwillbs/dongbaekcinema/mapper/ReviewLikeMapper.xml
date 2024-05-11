@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itwillbs.dongbaekcinema.mapper.ReviewLikeMapper">
+	
+<!-- 	<select id="selectReviewLike" resultType="com.itwillbs.dongbaekcinema.vo.ReviewLikeVO"> -->
+	<select id="selectFindReviewLike" resultType="int">
+		SELECT COUNT(*) 
+		FROM 
+			REVIEW_LIKES
+		WHERE 
+			member_id = #{member_id}
+			AND review_num = #{review_num}
+	</select>
+	
+	<insert id="insertReviewLike">
+		INSERT INTO 
+			REVIEW_LIKES
+		VALUES(
+			null
+			, #{member_id}
+			, #{review_num}
+		)	
+	</insert>
+	
+	<select id="selectReviewLikeCount" resultType="int">
+		SELECT count(*)
+		FROM REVIEW_LIKES
+		WHERE review_num = #{review_num}
+	</select>
+	
+	<delete id="deleteReviewLike">
+		DELETE
+			FROM REVIEW_LIKES
+			WHERE 
+				member_id = #{member_id}
+				AND review_num = #{review_num}
+	</delete>
+	
+	<select id="selectMember" resultType="int">
+		SELECT count(*) FROM MEMBERS
+		WHERE member_id = #{member_id}
+	</select>
+
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itwillbs.dongbaekcinema.mapper.MovieLikeMapper">
+	
+	<!-- 찜한 영화 찾기(지영) - SELECT -->
+	<select id="selectLikeMovie" resultType="com.itwillbs.dongbaekcinema.vo.MovieLikeVO">
+		SELECT *
+			FROM LIKES
+			WHERE member_id = #{member_id}
+	</select>
+	
+	<!-- 찜 기능 - INSERT -->
+	<insert id="insertLikeMovie">
+		INSERT
+			INTO LIKES
+				(
+				member_id
+				, movie_num
+				)
+		VALUES
+				(
+				#{member_id}
+				, #{movie_num}
+				)
+	</insert>
+	
+	<!-- 찜 취소 기능 - DELETE -->
+	<delete id="deleteLikeMovie">
+		DELETE
+			FROM LIKES
+		WHERE
+			member_id = #{member_id}
+			AND movie_num = ${movie_num}
+	</delete>
+	
+	<!-- 찜 영화 갯수 세기 - SELECT -->
+	<select id="countLikeMovie">
+		SELECT COUNT(*)
+			FROM LIKES
+			WHERE member_id = #{member_id}
+	</select>
+	
+	<!-- 찜한 영화 목록 조회 - SELECT -->
+	<select id="selectLikeMovieList" resultType="com.itwillbs.dongbaekcinema.vo.MovieLikeVO">
+		SELECT 
+			M.movie_poster
+			, M.movie_name_kr
+			, movie_release_date
+			, L.member_id
+			, L.movie_num
+			, (CASE  WHEN  movie_close_date &lt; now() THEN '상영종료'
+		 			ELSE '상영중'
+		 			END ) AS movie_status
+				, IF(play_status = '상영완료', '관람', '미관람') AS 'like_view' 
+			FROM 
+				LIKES L
+			JOIN MOVIES M ON L.movie_num = M.movie_num
+			LEFT JOIN 
+				(SELECT member_id, movie_poster, movie_name_kr, movie_num, play_status, count(*)
+					FROM ORDER_MY_TICKET
+					WHERE member_id = #{member_id}
+					GROUP BY member_id, movie_poster, movie_name_kr, movie_num, play_status) AS DW
+				ON L.movie_num = DW.movie_num
+			WHERE
+				L.member_id = #{member_id}
+			ORDER BY like_num DESC
+			LIMIT
+				#{startRow},
+				#{listLimit}
+
+	</select>
+	
+</mapper>

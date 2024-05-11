@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itwillbs.dongbaekcinema.mapper.PaymentMapper">
+<!--   <cache-ref namespace=""/> -->
+
+	<!-- 관리자페이지 - 결제내역에서 상세보기로 클릭했을때 id의 결제상세내역 -->
+	<select id="selectPayment" resultType="com.itwillbs.dongbaekcinema.vo.PaymentVO">
+		SELECT pm.payment_num
+				, mb.member_name 
+				, pm.payment_datetime 
+				, mv.movie_name_kr
+				, t.theater_name
+				, s.seat_num
+				, sn.snack_name
+				, pm.payment_card_name
+				, pm.payment_total_price
+				, count(o.order_num) AS headcount  
+		FROM PAYMENTS pm
+			JOIN ORDERS o
+				ON o.order_num = pm.order_num
+			JOIN MEMBERS mb 
+				ON mb.member_id = o.member_id
+			JOIN ORDER_TICKETS ot 
+				ON ot.order_num = o.order_num 
+			JOIN PLAYS pa
+				ON pa.play_num = ot.play_num 
+			JOIN MOVIES mv
+				ON mv.movie_num = pa.movie_num 
+			JOIN THEATERS t
+				ON t.theater_num = pa.theater_num 
+			JOIN TICKET_TYPES tt
+				ON tt.ticket_type_num = ot.ticket_type_num 
+			JOIN SEATS s
+				ON s.seat_num = ot.seat_num
+			JOIN ORDER_SNACKS os
+				ON os.order_num = o.order_num
+			JOIN SNACKS sn
+				ON sn.snack_num = os.snack_num
+		WHERE pm.order_num = ${order_num}
+		GROUP BY 
+			pm.payment_num
+			, mb.member_name
+			, pm.payment_datetime
+			, mv.movie_name_kr
+			, t.theater_name
+			, s.seat_num
+			, sn.snack_name
+			, pm.payment_card_name
+			, pm.payment_total_price
+	
+	<!-- 백업용 결제일까지 되는 구문 -->
+<!-- 		SELECT * -->
+<!-- 		FROM PAYMENTS p -->
+<!-- 		JOIN ORDERS o -->
+<!-- 			ON p.order_num = o.order_num -->
+<!-- 		JOIN MEMBERS m  -->
+<!-- 			ON o.member_id = m.member_id  -->
+<!-- 		where p.order_num = #{order_num} -->
+	</select>
+	
+	<!-- 페이징처리로 없어도 됨 -->
+<!-- 	<select id="selectPaymentList" resultType="com.itwillbs.dongbaekcinema.vo.PaymentVO"> -->
+<!-- 		SELECT * -->
+<!-- 		FROM PAYMENTS p -->
+<!-- 		JOIN ORDERS o -->
+<!-- 		ON p.order_num = o.order_num -->
+		
+<!-- 	</select> -->
+	
+	<!-- 마이페이지 - 회원의 나의 구매내역 조회(지영) -->
+	<!--
+	뷰 사용 : BUY_DETAIL 
+		(결제번호, 결제이름, 결제 카드, 결제카드번호, 결제 금액, 결제상태,
+		  영화이름, 티켓타입(일반/일반)
+	리턴타입 : List<> -->
+	<select id="selectMyPaymentList" resultType="com.itwillbs.dongbaekcinema.voNew.MyReservationDetailVO">
+		SELECT *
+			FROM BUY_DETAIL
+			WHERE member_id = #{member_id}
+			LIMIT #{pageNum} -- 후에 pageNum으로 조절
+	</select>
+	
+	<!-- 마이페이지 - 회원의 나의 구매내역 상세 조회(지영) -->
+<!-- 	<select id="selectMyPaymentList" resultType="com.itwillbs.dongbaekcinema.voNew.MyReservationDetailVO"> -->
+<!-- 		SELECT * -->
+<!-- 			FROM BUY_DETAIL -->
+<!-- 			WHERE order_num = #{order_num} -->
+<!-- 	</select> -->
+	
+	<!-- 페이징처리중 - 0615 정의효 -->
+	<select id="getPaymentList" resultType="com.itwillbs.dongbaekcinema.vo.PaymentVO">
+		SELECT * 
+			FROM PAYMENTS p
+			JOIN ORDERS o
+			ON p.order_num = o.order_num
+			ORDER BY o.order_num DESC
+			LIMIT #{start}, #{perPage}
+	</select>
+	
+	<!-- 페이징처리중 - 0615 정의효 -->
+	<select id="getCount" resultType="int">
+		SELECT COUNT(*)
+			FROM PAYMENTS
+	</select>
+	
+</mapper>

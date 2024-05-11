@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itwillbs.dongbaekcinema.mapper.MovieMapper">
+<!--   <cache-ref namespace=""/> -->
+
+	<!-- 0620정의효 영화 등록 -->
+	<insert id="insertMovie">
+		INSERT 
+			INTO MOVIES
+			VALUES (
+				null
+				, #{movie_name_kr}
+				, #{movie_name_en}
+				, #{movie_director}
+				, #{movie_cast}
+				, #{movie_genre}
+				, #{movie_release_date}
+				, #{movie_close_date}
+				, #{movie_running_time}
+				, #{movie_audience_num}
+				, #{movie_content}
+				, #{movie_grade}
+				, #{movie_poster}
+				, #{movie_preview}
+				, #{movie_photo1}
+				, #{movie_photo2}
+				, #{movie_photo3}
+				, null
+			) 
+	</insert>	
+	
+
+
+	<!-- 영화 정보 조회 - 각영화당 평점평균정보 포함하는 뷰(MOVIES_ADD_REVIEWRATING) 조회 -->
+	<select id="selectMovieADDReview" resultType="com.itwillbs.dongbaekcinema.vo.MovieVO">
+		SELECT *
+		FROM 
+			MOVIES_ADD_REVIEWRATING
+		WHERE movie_num = #{movie_num}
+	</select>
+
+   <!-- 현재상영작 - 셀렉트박스:예매율순 
+       ++ 페이징처리로 LIMIT추가
+       ++ 검색처리로 if절 추가
+    --> 
+   <select id="select_presentMovie_bookingRateDESC" resultType="com.itwillbs.dongbaekcinema.vo.MovieVO"> 
+       SELECT * 
+       FROM 
+          MOVIES 
+       WHERE 
+          now() &gt;= movie_release_date  
+         AND movie_close_date &gt;= now() 
+      
+      <if test="!movieSearchKeyword.equals('')">
+         AND
+         movie_name_kr LIKE '%${movieSearchKeyword}%'
+      </if>
+      ORDER BY 
+         movie_booking_rate DESC
+      LIMIT
+         #{startRow}
+         , #{listLimit}
+   </select>
+	
+	<!-- 전체 글 목록 갯수 조회 (페이징처리)
+	++ 검색기능추가로 if절추가-->
+	<select id="selectMovieListCounting" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM 
+			MOVIES		
+		WHERE 
+         now() &gt;= movie_release_date  
+         AND movie_close_date &gt;= now() 
+      <if test="!movieSearchKeyword.equals('')">
+         AND
+         movie_name_kr LIKE '%${movieSearchKeyword}%'
+      </if>
+	</select>
+	
+	
+	<!-- 메인. top4영화목록 조회 -->
+	<select id="select_movieListTop4" resultType="com.itwillbs.dongbaekcinema.vo.MovieVO">
+		SELECT * 
+ 		FROM 
+ 			MOVIES 
+ 		WHERE 
+ 			now() &gt;= movie_release_date  
+			AND movie_close_date &gt;= now() 
+		ORDER BY 
+			movie_booking_rate DESC 
+		LIMIT 4
+	</select>
+
+	<!-- 상영예정작 조회 : 현재날짜 15일전 ~ 개봉일까지 ==> 기본 : 예매율순-->
+	<select id="select_prepareMovie" resultType="com.itwillbs.dongbaekcinema.vo.MovieVO">
+		SELECT *
+		FROM 
+			MOVIES
+		WHERE 
+			movie_release_date &gt; now() 
+			AND movie_release_date &lt; ADDDATE(now(), INTERVAL 15 DAY)
+		ORDER BY 
+			movie_booking_rate DESC
+		
+	</select>
+	
+	<!-- 상영예정작 - 가나다순정렬 변경시 영화목록 조회 -->
+	<select id="select_movieList_prepareNameDESC" resultType="com.itwillbs.dongbaekcinema.vo.MovieVO">
+		SELECT *
+		FROM 
+			MOVIES
+		WHERE 
+			movie_release_date &gt; now() 
+			AND movie_release_date &lt; ADDDATE(now(), INTERVAL 15 DAY)
+		ORDER BY 
+			movie_name_kr
+		LIMIT
+			#{startRow}
+			, #{listLimit}
+	</select>
+	
+	<!-- 상영예정작 - 영화목록 개수 조회(페이징처리) -->
+	<select id="selectMovieListCount_prepare" resultType="int">
+		SELECT COUNT(*)
+		FROM MOVIES
+		WHERE 
+			movie_release_date &gt; now() 
+			AND movie_release_date &lt; ADDDATE(now(), INTERVAL 15 DAY)
+	</select>
+	
+	
+	<!-- 영화목록 - 현재상영작 평점순 정렬 변경시 조회되는 영화목록 -->
+	<!--  
+	MOVIE_REVIEWS  : 영화당 평점 뷰
+	CREATE OR REPLACE VIEW MOVIE_REVIEWS AS(
+	SELECT r.movie_num, AVG(review_rating) AS movie_review_rating
+	FROM REVIEWS r JOIN MOVIES m
+	ON r.movie_num = m.movie_num
+	GROUP BY r.movie_num
+	);	
+	-->
+	<select id="select_presentMovie_reviewRate" resultType="com.itwillbs.dongbaekcinema.vo.MovieVO">
+	SELECT DISTINCT *
+<!-- 	SELECT DISTINCT m.*, r.* -->
+	FROM 
+		MOVIES m 
+	JOIN 
+		MOVIE_REVIEWS r
+	ON m.movie_num = r.movie_num
+	WHERE
+		now() &gt;= movie_release_date 
+		AND movie_close_date &gt;= now()
+	ORDER BY
+		movie_review_rating DESC
+	LIMIT
+		#{startRow}
+		, #{listLimit}
+	</select>
+
+	<!-- REVIEW테이블, MOVIE테이블 조인 필요 -->
+	<resultMap type="com.itwillbs.dongbaekcinema.vo.MovieVO" id="MovieVO">
+		<result property="movie_num" column="movie_num"/>
+		<result property="movie_name_kr" column="movie_name_kr"/>
+		<result property="movie_name_en" column="movie_name_en"/>
+		<result property="movie_director" column="movie_director"/>
+		<result property="movie_cast" column="movie_cast"/>
+		<result property="movie_genre" column="movie_genre"/>
+		<result property="movie_release_date" column="movie_release_date"/>
+		<result property="movie_close_date" column="movie_close_date"/>
+		<result property="movie_running_time" column="movie_running_time"/>
+		<result property="movie_audience_num" column="movie_audience_num"/>
+		<result property="movie_content" column="movie_content"/>
+		<result property="movie_poster" column="movie_poster"/>
+		<result property="movie_preview" column="movie_preview"/>
+		<result property="movie_photo1" column="movie_photo1"/>
+		<result property="movie_photo2" column="movie_photo2"/>
+		<result property="movie_photo3" column="movie_photo3"/>
+		<result property="movie_booking_rate" column="movie_booking_rate"/>
+	</resultMap>
+	<resultMap type="com.itwillbs.dongbaekcinema.vo.ReviewVO" id="ReviewVO">
+		<result property="review_num" column="review_num"/>
+		<result property="movie_num" column="movie_num"/>
+		<result property="member_id" column="member_id"/>
+		<result property="review_rating" column="review_rating"/>
+		<result property="review_content" column="review_content"/>
+		<result property="review_date" column="review_date"/>
+		<result property="movie_review_rating" column="movie_review_rating"/>
+	</resultMap>	
+	
+<!-- 영화당 리뷰 불러오기 ==> movieDetail.jsp -->
+<!-- 멤버아이디 2번째문자열부터 3개 문자 ***대체 => 아이디가리기 -->
+<!-- <select id="selectReview" resultType="com.itwillbs.dongbaekcinema.vo.ReviewVO"> -->
+<!-- 	SELECT   -->
+<!-- 		review_date -->
+<!-- 		, review_content -->
+<!-- 		, INSERT(member_id, 2, 3, '***') as member_id  -->
+<!-- 	FROM  -->
+<!-- 		REVIEWS -->
+<!-- 	WHERE -->
+<!-- 		movie_num = #{movie_num} -->
+<!-- 	GROUP BY  -->
+<!-- 		movie_num	 -->
+<!-- 		, review_content -->
+<!-- 		, member_id -->
+<!-- 		, review_date -->
+<!-- 	ORDER BY -->
+<!-- 		review_date DESC -->
+<!-- 	LIMIT 1 -->
+<!-- </select> -->
+
+<!-- 영화당 베스트리뷰(공감가장많이받은 리뷰) 출력하기 -->
+<!-- 멤버아이디 2번째문자열부터 3개 문자 ***대체 => 아이디가리기 -->
+<select id="selectReview" resultType="com.itwillbs.dongbaekcinema.vo.ReviewVO">
+	SELECT  
+		r.review_content
+		, INSERT(r.member_id, 2, 3, '***') as member_id 
+	FROM 
+		REVIEWS r
+	JOIN
+		REVIEW_LIKES rl
+	ON 
+		r.review_num = rl.review_num
+	WHERE
+		movie_num = #{movie_num}
+	GROUP BY 
+ 		r.review_num
+	ORDER BY
+   		 COUNT(rl.review_like_num) DESC
+	LIMIT 1
+</select>
+
+
+
+
+
+<!-- 전달받은 movie_num 파라미터값과 일치하는 리뷰카운팅정보 전달 -->
+<select id="selectReviewCounting" resultType="com.itwillbs.dongbaekcinema.vo.ReviewVO">
+	SELECT
+		movie_num
+		,IFNULL(COUNT(review_num),0) as 'review_count'
+	FROM 
+		REVIEWS
+	WHERE 
+		movie_num = #{movie_num}
+</select>
+
+<!--  리뷰총개수카운팅 (페이징용) -->
+<select id="selectReviewCounting_forPaging" resultType="int">
+	SELECT
+		COUNT(*)
+	FROM 
+		REVIEWS
+	WHERE 
+		movie_num = #{movie_num}
+</select>
+
+	
+<!-- 리뷰 목록 조회 - 최신순정렬 -->
+<!-- 멤버아이디 2번째문자열부터 3개 문자 ***대체 => 아이디가리기 -->
+<select id="selectReviewList" resultType="com.itwillbs.dongbaekcinema.vo.ReviewVO">
+	SELECT 
+		review_num, 
+		review_rating, 
+		INSERT(member_id, 2, 3, '***') as member_id, 
+		review_content, 
+		review_date, 
+		movie_num
+	FROM 
+		REVIEWS
+	WHERE 
+		movie_num = #{movie_num}
+	ORDER BY 
+		review_date DESC
+	LIMIT
+		#{startRow}
+		, #{listLimit}
+</select>
+	
+	<!-- 영화 목록 전부 조회 페이징처리로 필요없음 - 0616 정의효 -->
+<!-- 	<select id="selectMovieList" resultType="com.itwillbs.dongbaekcinema.vo.MovieVO"> -->
+<!-- 		SELECT * -->
+<!-- 		FROM MOVIES -->
+<!-- 	</select> -->
+	
+	<!-- 페이징처리 - 0616정의효 - 0622페이징처리후 완료되면 지우기  -->
+<!-- 	<select id="getMovieList" resultType="com.itwillbs.dongbaekcinema.vo.MovieVO"> -->
+<!-- 		SELECT * -->
+<!-- 			FROM MOVIES -->
+<!-- 			ORDER BY movie_num DESC -->
+<!-- 			LIMIT #{start}, #{perPage} -->
+<!-- 	</select> -->
+	
+	<!-- 페이징처리 - 0616정의효 - 0622페이징처리후 완료되면 지우기  -->
+<!-- 	<select id="getCount" resultType="int"> -->
+<!-- 		SELECT COUNT(*) -->
+<!-- 			FROM MOVIES -->
+<!-- 	</select>	 -->
+	
+	<!-- 영화목록 조회 및 영화 한국제목으로 검색 0622- 정의효 -->
+	<select id="selectMovieList" resultType="com.itwillbs.dongbaekcinema.vo.MovieVO">
+		SELECT *
+			FROM MOVIES
+			<if test="!movieSearchKeyword.equals('')">
+				WHERE
+					movie_name_kr LIKE '%${movieSearchKeyword}%'
+			</if>
+			ORDER BY 
+				movie_num DESC
+			LIMIT
+				#{startRow}
+				, #{listLimit}
+	</select>
+
+	<!-- 전체 영화 목록 개수 조회 0622정의효 -->
+	<select id="selectMovieListCount" resultType="int">
+		SELECT COUNT(*)
+			FROM MOVIES
+			<if test="!movieSearchKeyword.equals('')">
+				WHERE
+					movie_name_kr LIKE '%${movieSearchKeyword}%'
+			</if>
+	</select>
+
+
+
+
+
+
+
+
+	<!-- 영화목록 상세 조회 -->
+	<select id="selectMovie" resultType="com.itwillbs.dongbaekcinema.vo.MovieVO">
+		SELECT *
+		FROM MOVIES
+		WHERE movie_num = #{movie_num}
+	</select>
+	
+	<!-- 0620정의효 영화삭제 -->
+	<delete id="movieDelete">
+		DELETE
+			FROM
+				MOVIES
+			WHERE
+				movie_num = #{movie_num}
+	</delete>
+	
+	<!-- 영화수정 0620정의효 -->
+	<update id="movieModify" parameterType="com.itwillbs.dongbaekcinema.vo.MovieVO">
+		UPDATE MOVIES 
+			SET
+			    movie_name_kr = #{movie_name_kr}
+			    , movie_name_en = #{movie_name_en}
+			    , movie_director = #{movie_director}
+			    , movie_cast = #{movie_cast}
+			    , movie_genre = #{movie_genre}
+			    , movie_release_date = #{movie_release_date}
+			    , movie_close_date = #{movie_close_date}
+			    , movie_running_time = #{movie_running_time}
+			    , movie_audience_num = #{movie_audience_num}
+			    , movie_content = #{movie_content}
+			    , movie_grade = #{movie_grade}
+			    , movie_poster = #{movie_poster}
+			    , movie_preview = #{movie_preview}
+			    , movie_photo1 = #{movie_photo1}
+			    , movie_photo2 = #{movie_photo2}
+			    , movie_photo3 = #{movie_photo3}
+			    , movie_booking_rate = #{movie_booking_rate}
+			WHERE movie_num = #{movie_num}
+	</update>
+	
+	<!-- 영화 중복 검사 -->
+	<select id="isMovieAlreadyRegistered" parameterType="com.itwillbs.dongbaekcinema.vo.MovieVO" resultType="boolean">
+		  SELECT EXISTS (
+        			SELECT 1 FROM MOVIES WHERE movie_name_kr = #{movieNameKr}
+    			 ) as is_movie_already_registered
+	</select>
+</mapper>
+
+

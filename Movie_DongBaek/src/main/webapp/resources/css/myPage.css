@@ -1,0 +1,58 @@
+@charset "UTF-8";
+ 
+/* span { */
+/* 	font-size: 1.1em;  */
+/* } */
+
+/* .mainTop { */
+/* 	background-color: lightgray; */
+/* } */
+
+#myPage_GOLD {
+	width: 150px;
+	height: 150px;
+}
+
+#myPage_nowGrade {
+	width: 70px;
+	height: 70px;
+}
+
+.mainTop {
+	margin-top: 15px;
+} 
+
+#mainNav {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+#bottom-right {
+	float: right;
+}
+
+#movie_ticketing {
+	width: 60px;
+	height: 60px;
+}
+
+.sale {
+	color: red;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

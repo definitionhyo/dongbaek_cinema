@@ -1,0 +1,49 @@
+@charset "UTF-8";
+/* 버튼 */
+.btn-red{
+	border-color: #ef4f4f;
+	background-color: #ef4f4f;
+	color: #fff;
+}
+
+.btn-red:hover {
+	background-color: #eb2d2d;
+	color: #fff;
+}
+
+.btn-red:focus{
+	box-shadow: 0 0 0 0.2rem rgba(239,79,79,.5);
+}
+
+.btn-outline-red{
+	border-color: #ef4f4f;
+	color: #ef4f4f
+}
+
+.btn-outline-red:hover {
+	background-color: #eb2d2d;
+	color: #fff;
+}
+
+.btn-outline-red:focus {
+	box-shadow: 0 0 0 0.2rem rgba(239,79,79,.2);
+}
+
+.page-link{
+	color: #ef4f4f;
+}
+
+.page-link:hover {
+	color: #eb2d2d;
+}
+
+.page-link:focus {
+	box-shadow: 0 0 0 0.2rem rgba(239,79,79,.2);
+}
+
+ 
+.form-control:focus {
+	border-color: #f6a2a2;
+	box-shadow: 0 0 0 0.2rem rgba(239,79,79,.2);
+}
+

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itwillbs.dongbaekcinema.mapper.MypageMapper">
+  
+  <!-- 나의 예매내역 조회 -->
+  <select id="selectMyTicket" resultType="com.itwillbs.dongbaekcinema.voNew.MyTicketVO">
+		SELECT 
+			member_id
+			, movie_poster
+			, movie_name_kr
+			, play_date
+			, movie_num
+			, play_start_time
+			, play_status
+			, payment_num
+			, payment_name
+			, payment_datetime
+			, payment_card_name
+			, payment_card_num
+			, PAYMENTS.order_num
+			, ticket_payment_status
+			, play_change
+			FROM
+				ORDER_MY_TICKET
+			JOIN PAYMENTS
+					ON PAYMENTS.order_num = ORDER_MY_TICKET.order_num
+			WHERE 
+				member_id = #{member_id}
+				AND payment_datetime &gt;= SUBDATE(NOW(), INTERVAL 1 MONTH)
+			GROUP BY
+				member_id
+				, movie_poster
+				, movie_name_kr
+				, play_date
+				, movie_num
+				, play_start_time
+				, play_status
+				, payment_num
+				, payment_name
+				, payment_datetime
+				, payment_card_name
+				, payment_card_num
+				, PAYMENTS.order_num
+				, ticket_payment_status
+				, play_change
+			ORDER BY
+				play_date DESC, PAYMENTS.order_num DESC
+			<if test="listLimit != 0"> <!-- 페이지를 0,0으로 두면 나오지 않게 처리 -->
+				LIMIT 
+					#{startRow}
+					, #{listLimit}
+			</if>
+	</select>
+  
+  <!-- 나의 멤버십 등급 조회 -->
+  <select id="selectMyGrade" resultType="com.itwillbs.dongbaekcinema.voNew.GradeNextVO">
+		SELECT
+			G.grade_name
+			, grade_discount
+			, grade_max
+			, next_grade_name
+			, next_grade_discount
+			FROM GRADE_NEXT G
+			JOIN MEMBERS M ON G.grade_name = M.grade_name
+			WHERE member_id = #{member_id}
+  </select>
+  
+  
+  <!-- 나의 개인정보 조회 -->
+  <select id="getMyInfoList" resultType="com.itwillbs.dongbaekcinema.vo.MemberVO">
+  		SELECT *
+  			FROM MEMBERS
+  			WHERE member_id = #{member_id}
+  </select>
+  
+  <!-- 나의 문의 내역 조회 -->
+  <select id="selectMyInq" resultType="com.itwillbs.dongbaekcinema.vo.CsVO">
+ 		SELECT *
+ 			FROM CS
+ 			WHERE member_id = #{member_id}
+  </select>
+  
+   <!-- 나의 문의 내역 조회 : 게시판 -->
+  <select id="selectMyInqList" resultType="com.itwillbs.dongbaekcinema.voNew.CsInfoVO">
+  		SELECT *
+ 			FROM CS
+ 			WHERE member_id = #{member_id}
+  </select>
+  
+    <!-- 나의 문의 내역 상세 조회-->
+	  <select id="selectMyInquiryDetail" resultType="com.itwillbs.dongbaekcinema.voNew.CsInfoVO">
+	<!--   <select id="selectMyInquiryDetail" resultType="com.itwillbs.dongbaekcinema.vo.CsInfoVO"> -->
+	  		SELECT 
+	 			cs_num
+	 			, cs_subject
+	 			, cs_content
+	 			, cs_date
+	 			, cs_type
+	 			, cs_file
+	 			, cs_file_real
+	 			, cs_phone
+	 			, cs_reply
+	 			, m.member_id
+	 			, member_email
+	 		FROM CS c
+			JOIN MEMBERS m ON c.member_id = m.member_id
+			WHERE cs_num = #{cs_num}
+	  </select>
+
+	<!--  나의 문의 내역 수정 -->
+	<update id="updateMyInqList">
+		UPDATE
+			CS
+			SET 
+  				cs_content = #{cs_content}
+				<if test="cs_file_real neq ''">
+  					, cs_file_real = #{cs_file_real}
+  				</if>
+  			WHERE cs_num = #{cs_num}
+	</update>
+
+	<!-- 나의 문의 내역 1:1 문의 글 삭제 -->
+	<delete id="deleteMyInq">
+		DELETE 
+			FROM
+				CS
+			WHERE 
+				cs_num = #{cs_num} 
+	</delete>
+
+	<!--  비밀번호  -->
+	<select id="selectMyPasswd" resultType="String">
+			SELECT member_pass
+	  			FROM MEMBERS
+	  			WHERE member_id = #{member_id}
+	</select>
+	  
+	  
+
+  <!-- 나의 회원정보 수정  -->
+  <!-- 변경 가능 항목 : 비밀번호, 휴대폰, 이메일, 좋아하는 장르 -->
+  <!--  -->
+  <update id="updateMyInfo">
+  		UPDATE
+  			MEMBERS
+  			SET
+  				<if test="member_pass neq ''">
+  					member_pass = #{member_pass}
+  				</if>
+  				<if test="member_email neq ''">
+  					, member_email = #{member_email}  					
+  				</if>
+  				<if test="member_like_genre neq ''">
+  					, member_like_genre = #{member_like_genre}
+  				</if>
+  			WHERE member_id = #{member_id}
+  </update>
+  
+	<!-- 회원 탈퇴 -->
+	<!-- 상태 변경 : member_status 를 탈퇴로 변경  -->
+	<update id="memberwithdrawal">
+		UPDATE
+			MEMBERS
+			SET
+				member_status = '탈퇴'
+				, member_withdrawl = now()
+			WHERE member_id = #{member_id}
+	</update>
+  
+	<!-- 나의 리뷰 조회하기 -->
+<!-- 	<select id="selectMyReviewList" resultType="com.itwillbs.dongbaekcinema.voNew.MyReviewVO"> -->
+<!-- 		 SELECT DISTINCT  -->
+<!-- 					r.* -->
+<!-- 					, m.movie_name_kr  -->
+<!-- 					, (CASE -->
+<!-- 				        WHEN ((p.play_date > now()) -->
+<!-- 				        OR ((p.play_date = now()) -->
+<!-- 				        AND (p.play_start_time  > curtime()))) THEN '상영 전' -->
+<!-- 				        ELSE '상영완료' -->
+<!-- 			   		  	END) AS `play_status` -->
+<!-- 			FROM REVIEWS r -->
+<!-- 			JOIN MEMBERS mm ON mm.member_id = r.member_id -->
+<!-- 			JOIN PLAYS p ON p.movie_num = r.movie_num -->
+<!-- 			JOIN MOVIES m ON m.movie_num = r.movie_num  -->
+<!-- 			JOIN ORDER_TICKETS ot ON ot.play_num = p.play_num -->
+<!-- 			JOIN PAYMENTS pm ON pm.order_num = ot.order_num -->
+<!-- 			WHERE mm.member_id = #{member_id} -->
+<!-- 				AND payment_status = '결제완료' -->
+<!-- 			<if test="startRow != 0 and listLimit != 0"> -->
+<!-- 				LIMIT  -->
+<!-- 					#{startRow} -->
+<!-- 					, #{listLimit} -->
+<!-- 			</if> -->
+<!-- 	</select> -->
+
+		<select id="selectMyReviewList" resultType="com.itwillbs.dongbaekcinema.voNew.MyReviewVO">
+			SELECT DISTINCT
+		         p.movie_num
+		         , ot.member_id 
+		         , m.movie_name_kr
+		         , (CASE
+		            WHEN ((p.play_date > now())
+		            OR ((p.play_date = now())
+		            AND (p.play_start_time  > curtime()))) THEN '상영 전'
+		            ELSE '상영완료'
+		             END) AS play_status
+		 FROM ORDERS o -- 전체 주문
+		 JOIN ORDER_TICKETS ot ON o.order_num = ot.order_num
+		 JOIN PLAYS p ON ot.play_num = p.play_num
+		 JOIN MOVIES m ON p.movie_num = m.movie_num
+		 WHERE o.member_id = #{member_id};
+				 <if test="startRow != 0 and listLimit != 0">
+					LIMIT 
+						#{startRow}
+						, #{listLimit}
+				</if>
+		</select>
+		
+		<select id="selectMyReview" resultType="com.itwillbs.dongbaekcinema.voNew.MyReviewVO">
+			SELECT DISTINCT r.* 
+			FROM REVIEWS r
+			JOIN MEMBERS mm ON mm.member_id = r.member_id
+			JOIN PLAYS p ON p.movie_num = r.movie_num
+			JOIN ORDER_TICKETS ot ON ot.play_num = p.play_num
+			JOIN PAYMENTS pm ON pm.order_num = ot.order_num
+			WHERE mm.member_id = #{member_id}
+			AND payment_status = '결제완료'
+			AND p.movie_num = #{movie_num};
+		</select>
+  
+  <select id="selectMovieName" resultType="com.itwillbs.dongbaekcinema.voNew.MyReviewVO">
+	SELECT movie_name_kr
+	FROM MOVIES
+	WHERE movie_num = #{movie_num}
+  </select>
+  
+	<!-- 리뷰 등록하기 -->
+	<insert id="insertMyReview" parameterType="com.itwillbs.dongbaekcinema.voNew.MyReviewVO">
+		INSERT
+			INTO REVIEWS
+			VALUES (
+				#{review_rating}
+				, #{review_content}
+				, now()
+				, #{movie_num}
+				, #{member_id}
+			)
+	</insert>
+</mapper>

@@ -1,0 +1,503 @@
+@charset "UTF-8";
+
+.container-top{
+	margin: 3rem;
+}
+
+/* 예매 선택 구간 */
+/* 크기 조절 */
+.container-fluid{
+	width: 1200px;
+/* 	padding-left: 2rem; */
+	border: 1px solid #aaa;
+/* 	background-color: #d5b59c; */
+}
+div{
+	background-color: transparent;
+}
+div .title-area {
+	background-color: #ef4f4f;
+	height: 44px;
+	text-align: center;
+	line-height: 44px;
+	font-size: 1.25rem;
+	font-weight: bold;
+	color: #fff;
+}
+.container-fluid h5{
+	text-align: center;
+	font-weight: bold;
+}
+/* 각 파트 구별을 위한 색상 조절, 여백 */
+.row1>div{
+	height: 500px;
+/* 	margin: 0.5rem; */
+/* 	padding: 10px; */
+	background-color: white;
+}
+/* 페이지 이름 잘보이게 설정 */
+#mainArticle>h2{
+	font-weight: bold;
+	padding-left: 1rem;
+}
+
+/* 선택사항 안내 구간 */
+/* 위 파트와 구별을 위한 색상 부여 */
+.row2{
+	padding-top: 0.5rem;
+	height: 230px;
+	background-color: #aaa;
+}
+
+.row1>div{
+	border: 1px solid #aaa;
+}
+
+/* 극장 파트 좌우 배치 */
+/*
+#region{
+	border: 1px solid #000;
+	width: 70px;
+	display: inline-block;
+}
+#region td {
+	padding: 5px;
+}
+#room{
+	vertical-align: top;
+	border: 1px solid #000;
+	width: 120px;
+	display: inline-block;
+}
+*/
+#playType{
+	text-align: right;
+}
+#playTable {
+	overflow: auto;
+}
+#playTable button {
+	margin: 3px;
+}
+
+
+/* --------------------------------------- reservation_main.jsp ---------------------------------------- */
+/* --------- [영화]선택, [극장]선택, [날짜]선택, [시간]선택 영역 ul 앞의 모양 제거 --------- */
+#selectMovie ul, #selectTheater ul, #selectDate ul, #selectTime ul {
+	list-style: none;
+	padding-left: 0;
+}
+
+/* --------- [영화]선택, [극장]선택, [날짜]선택, [시간]선택 영역 <a> 설정 ----------- */
+#selectMovie a, #selectTheater a, #selectDate a, #selectTime a {
+	display: block;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	vertical-align: middle;
+}
+
+a:link, a:hover {
+	text-decoration: none;
+}
+
+a {
+	color: #333;
+	margin: 1px;
+}
+
+/* ------------ li 의 span 영역 text의 설정 ----------  */
+li .selected a span.text {
+	color:#fff;
+	font-weight: bold;
+   	padding-right: 5px;
+}
+
+/* ----------------- [영화] 선택 영역 ------------- */
+#selectMovie .selected a {
+	background-color: #333;
+/*     width: 270px; */
+    height: 33px;
+    line-height: 33px;
+    border: 1px solid #000;
+    color:#fff;
+}
+
+/* ----------------- [극장] 선택 영역 ------------- */
+#selectTheater .selected a {
+	background-color: #333;
+/*     width: 124px; */
+    height: 33px;
+    line-height: 33px;
+    border: 1px solid #000;
+    color:#fff;
+}
+
+/* ----------------- [날짜] 선택 영역 ------------- */
+#selectDate .selected a {
+	background-color: #333;
+	width: 171px;
+    height: 33px;
+    line-height: 33px;
+    border: 1px solid #000;
+    color:#fff;
+}
+
+#selectDate .month {
+	display: table;
+	text-align: center;
+}
+
+#selectDate .month>#playMonth {
+	display: table-cell;
+}
+
+#selectDate .day ul li a {
+	display: table;
+}
+
+#selectDate .day ul li a .playTodayLabel{
+	display: table-cell;
+	width: 60px;
+	text-align: center;
+}
+
+#selectDate .day ul li a .playDate{
+	display: table-cell;
+	width: 60px;
+	text-align: center;
+}
+
+
+
+/* ----------------- [시간] 선택 영역 ------------- */
+#selectTime a {
+    height: 66px;
+/*     border: 1px solid #000; */
+    color:#333;
+    margin: 1px;
+    flex-wrap: nowrap;
+    display: table
+}
+
+#selectTime a span.playTimeType {
+	display: table-cell;
+	width: 50px;
+	font-size: 13px;
+}
+
+#selectTime a span.time {
+	display: table-cell;
+	width: 100px;
+}
+
+#selectTime a span.movie {
+	display: table-cell;
+	width: 135px;
+}
+
+#selectTime a span.theater {
+	display: table-cell;
+	width: 80px;
+	text-align: right;
+	padding-right: 5%;
+	font-size: 13px;
+}
+
+#selectTime hr {
+	padding: 0;
+	margin: 0;
+}
+
+#selectTime .time{
+	text-align: left;
+	vertical-align: top;
+	font-weight: 300;
+}
+
+#selectTime strong {
+	display: block;
+	font-weight: 700;
+	font-size: 1.2em;
+	height: 33px;
+	padding: 0;
+}
+
+#selectTime em {
+	display: block;
+	font-size: .8667em;
+	font-weight: 300;
+	height: 33px;
+	padding: 0;
+} 
+
+#selectTime .selected a {
+	background-color: #333;
+/*     width: 270px; */
+    height: 66px;
+    border: 1px solid #000;
+    color:#fff;
+}
+
+#selectTime li a:hover {
+	background-color: #dfdfdf;
+}
+
+#selectTime .selected a {
+	background-color: #333!important;
+    border: 1px solid #000!important;
+    color:#fff!important;
+}
+
+.disabled {
+	color: #666;
+    opacity: .5;
+    cursor: default;
+    pointer-events: none;
+}
+/* ---------- [영화]선택, [극장]선택, [날짜]선택, [시간]선택 영역 스크롤바 설정 --------- */
+#selectMovie {
+	height: 370px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+#selectTheater, #selectDate {
+	height: 415px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+#selectTime {
+	height: 390px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+#selectMovie::-webkit-scrollbar, 
+#selectTheater::-webkit-scrollbar, 
+#selectDate::-webkit-scrollbar, 
+#selectTime::-webkit-scrollbar {
+    width: 10px;  /* 세로축 스크롤바 폭 너비 */
+    height: 20px;  /* 가로축 스크롤바 폭 너비 */
+}
+/* 스크롤바 막대 */
+#selectMovie::-webkit-scrollbar-thumb, 
+#selectTheater::-webkit-scrollbar-thumb, 
+#selectDate::-webkit-scrollbar-thumb, 
+#selectTime::-webkit-scrollbar-thumb {
+    background: #aaa; /* 스크롤바 막대 색상 */
+    border: 2px solid #dfdfdf; /* 스크롤바 막대 테두리 설정  */
+    border-radius: 12px 12px 12px 12px;
+    width: 6px;
+}
+#selectMovie::-webkit-scrollbar-thumb:hover, 
+#selectTheater::-webkit-scrollbar-thumb:hover, 
+#selectDate::-webkit-scrollbar-thumb:hover, 
+#selectTime::-webkit-scrollbar-thumb:hover {
+	background-color:#777;
+}
+/* 스크롤이 움직이는 뒷 배경 */
+#selectMovie::-webkit-scrollbar-track, 
+#selectTheater::-webkit-scrollbar-track, 
+#selectDate::-webkit-scrollbar-track,
+#selectTime::-webkit-scrollbar-track {
+/* 	background: #dfdfdf;  */
+}
+
+
+/* --------------------------------------- reservation_seat.jsp ---------------------------------------- */
+
+/* 관람인원선택 영역 */
+#selectPeople #adult, 
+#selectPeople #teenager, 
+#selectPeople #child, 
+#selectPeople #handi {
+	display: block;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+}
+.down {
+	margin-left: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+    position: relative;
+    display: inline;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1;
+    color: #ef4f4f;
+    background-color: #fff;
+    border: 1px solid #ef4f4f;
+}
+.result{
+	position: relative;
+    display: inline;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1;
+    color: #ef4f4f;
+    background-color: #fff;
+    border: 1px solid #ef4f4f;
+}
+.up {
+	border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    position: relative;
+    display: inline;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1;
+    color: #ef4f4f;
+    background-color: #fff;
+    border: 1px solid #ef4f4f;
+}
+
+.down:focus, .result:focus, .up:focus {
+	box-shadow: 0 0 0 0.2rem rgba(239,79,79,.2);
+	border-color: #f6a2a2;
+	outline: none;
+}
+
+/* 좌석 영역 */
+#seat-part {
+/* 	height: 500px; */
+	text-align: center;
+}
+
+#seat-part>hr{
+	border: 0;   /* 두께를 지정하려면 기본 border을 0으로 설정해야함 */
+	height: 3px;
+	background-color: #ccc;
+	width: 400px;
+}
+
+.align-left{
+	left: 10px;
+	position: relative;
+	margin-right: 20rem;
+}
+.align-right{
+	right: 10px;
+	position: absolute;
+	margin-right: 18rem;
+}
+
+#seatType {
+	margin-top: 50px;
+}
+
+#seat-part button{
+	margin: 1px;
+	border: 1px solid #aaa;
+	background-color: #aaa;
+	color: #fff;
+	width:30px; 
+	height: 23.5px;	
+	font-size:13px;
+	text-align: center;
+}
+
+.selectPart .selectedSeat {
+	margin: 1px;
+	width:30px; 
+	height: 23.5px;	
+	font-size:13px; 
+	border: 1px solid #ef4f4f;
+	background-color: #ef4f4f; 
+	border-radius: 0;
+	cursor: default;
+    pointer-events: none;
+	
+}
+.selectPart .disabledSeat {
+	margin: 1px;
+	border: 1px solid #aaa;
+    background-image: url("../img/x.png") !important;
+	background-color: #aaa;
+	width:30px; 
+	height: 23.5px;	
+	font-size:13px;
+    color: #666;
+    opacity: .5;
+    cursor: default;
+    pointer-events: none;
+}
+.selectPart .handiSeat {
+	margin: 1px;
+	border: 1px solid #42b983;
+	background-color: #42b983;
+	color: #fff;
+	width:30px; 
+	height: 23.5px;	
+	font-size:13px;
+	cursor: default;
+    pointer-events: none; 
+}
+.seatArea .handiSeat {
+	margin: 1px;
+	border: 1px solid #42b983 !important;
+	background-color: #42b983 !important;
+	color: #fff;
+	width:30px; 
+	height: 23.5px;	
+	font-size:13px;
+	cursor: default;
+/*     pointer-events: none;  */
+}
+
+#seat-part button:hover {
+	background-color: #777;
+}
+
+#seat-part button:click {
+	background-color: #ef4f4f;
+}
+
+
+#seat-part .seatArea button.seat.selected {
+	border: 1px solid #ef4f4f;
+	background-color: #ef4f4f; 
+	border-radius: 0;
+}
+
+#seat-part .seatArea button.seat.disabled {
+	color: #666;
+    opacity: .5;
+    cursor: default;
+    pointer-events: none;
+}
+/*
+#seat-part .seatArea button.seat.on {
+	border: 1px solid #ef4f4f;
+	background-color: #ef4f4f; 
+	border-radius: 0;
+}
+*/
+#seat-part .seatArea button.seat:visited {
+	border: 1px solid #ef4f4f;
+	background-color: #ef4f4f; 
+	border-radius: 0;
+}
+
+
+#seat-part button#A5, 
+#seat-part button#B5, 
+#seat-part button#C5, 
+#seat-part button#D5, 
+#seat-part button#E5, 
+#seat-part button#F5 {
+	margin-right: 20px;
+}
+
+#seat-part button#C1, 
+#seat-part button#C2, 
+#seat-part button#C3, 
+#seat-part button#C4, 
+#seat-part button#C5, 
+#seat-part button#C6, 
+#seat-part button#C7, 
+#seat-part button#C8, 
+#seat-part button#C9, 
+#seat-part button#C10 {
+	margin-bottom: 20px;
+}

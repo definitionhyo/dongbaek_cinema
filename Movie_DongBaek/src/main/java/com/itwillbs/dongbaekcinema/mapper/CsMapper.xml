@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itwillbs.dongbaekcinema.mapper.CsMapper">
+  
+  <!-- cs게시판 중 Faq 레코드 조회(지영) -->
+  <select id="selectCsFaq" resultType="com.itwillbs.dongbaekcinema.vo.CsVO">
+ 		SELECT 
+ 			cs_subject
+ 			, cs_content
+<!--  			, cs_date -->
+ 			, cs_type
+ 			FROM CS
+ 			<choose>
+ 				<when test="cs_type eq '전체'">
+ 					WHERE cs_type IN ('예매', '멤버십', '결제수단', '극장', '할인혜택')
+ 				</when>
+ 				<otherwise>
+		 			WHERE cs_type = #{cs_type}
+ 				</otherwise>
+ 			</choose>
+<!--  			LIMIT #{startNum} -->
+<!--  				, #{pageNum} -->
+  
+  </select>
+  
+  <!-- cs 부분 1:1질문 DB 에 저장(지영) - INSERT -->
+  <insert id="insertBoard">
+  	<!-- cs_type이 1:1질문인() cs_type_list_num를 찾아 +1 후 INSERT하기 -->
+  	<selectKey keyProperty="cs_type_list_num" resultType="int" order="BEFORE">
+  		SELECT IFNULL(MAX(cs_type_list_num), 0)
+  			FROM CS
+  			WHERE cs_type IN ('영화정보문의', '회원 문의', '예매 결제 관련 문의', '일반 문의')
+  	</selectKey>
+  		INSERT
+  			INTO CS
+  				(
+  				cs_subject
+  				, cs_content
+  				, cs_date
+  				, cs_type
+  				, cs_file
+  				, cs_file_real
+  				, cs_phone
+  				, cs_type_list_num
+  				, member_id
+  				)
+  			VALUES
+  				(
+  				#{cs_subject}
+  				, #{cs_content}
+  				, now()
+  				, #{cs_type}
+  				, SUBSTRING_INDEX(#{cs_file_real}, "_", -1)
+  				, #{cs_file_real}
+  				, #{cs_phone}
+  				, #{cs_type_list_num} + 1
+  				, #{member_id}
+  				)
+  	
+  </insert>
+  
+</mapper>

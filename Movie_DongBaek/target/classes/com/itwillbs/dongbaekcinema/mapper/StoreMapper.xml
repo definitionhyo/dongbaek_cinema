@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itwillbs.dongbaekcinema.mapper.StoreMapper">
+	<select id="selectSnackList"  resultType="com.itwillbs.dongbaekcinema.vo.SnackVO">
+		SELECT * FROM SNACKS;
+	</select> 
+	
+	<select id="selectSnackListByNum"  resultType="com.itwillbs.dongbaekcinema.vo.SnackVO">
+		SELECT * FROM SNACKS
+		WHERE snack_num = #{snackNum};
+	</select> 
+</mapper>
