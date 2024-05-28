@@ -12,25 +12,35 @@
 
 </br>
 
-## 2. 사용 기술
-#### `Back-end`
-  - Java 8
-  - Spring Boot 2.3
-  - Gradle
-  - Spring Data JPA
-  - QueryDSL
-  - H2
-  - MySQL 5.7
-  - Spring Security
-  - Jsoup
-#### `Front-end`
-  - Vue.js 3.0
-  - Element UI
+## 2. 개발환경 & 도구
+#### `개발언어`
+  - Java
+  - JSP
+  - HTML
+  - JavaScript
+  - CSS
+#### `사용기술`
+  - Spring
+  - jQuery
+  - AJAX
+  - JSON
+  - MyBatis
+  - Bootstrap
+#### `서버 & DB`
+  - Apache Tomcat
+  - MySQL
+
+#### `서버 & DB`
+  - GitHub
+  - Notion
+  - Discord
+  - GoogleDrive
 
 </br>
 
 
-## 3. 핵심 기능
+## 3. 담당 파트
+  - ㅇㅇ
   
 
 
