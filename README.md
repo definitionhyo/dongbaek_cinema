@@ -27,7 +27,7 @@
   - JSON
   - MyBatis
   - Bootstrap
-    ㄹ
+    
 #### `서버 & DB`
   - Apache Tomcat
   - MySQL
