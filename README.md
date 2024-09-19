@@ -1,5 +1,5 @@
 # :pushpin: 동백씨네마
->영화 예매 사이트 : http://211.216.89.172:8080/Movie_DongBaek/  
+>영화 예매 사이트 : http://121.175.56.57:8080/Movie_DongBaek/  
 >PPT : https://docs.google.com/presentation/d/17bmeJ3A8eGtZDbLlCavDNTpSxDgNLSxyq8gc9hh2jws/edit?usp=sharing  
 
 
