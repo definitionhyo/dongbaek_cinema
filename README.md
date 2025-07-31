@@ -3,7 +3,7 @@
 ## 프로젝트 소개
 >사용자는 영화를 예매하고 관리자는 영화 관리, 등록을 할 수있게 개발한 웹 애플리케이션입니다.
 ><br>
->홈페이지 링크 : http://192.168.45.245:8080/Movie_DongBaek/ (매일 09:00 ~ 18:00)  
+>홈페이지 링크 : http://192.168.45.98:8080/Movie_DongBaek/ (매일 09:00 ~ 18:00)  
 >PPT : https://docs.google.com/presentation/d/17bmeJ3A8eGtZDbLlCavDNTpSxDgNLSxyq8gc9hh2jws/edit?usp=sharing  
 
 </br>
