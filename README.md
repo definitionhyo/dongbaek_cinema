@@ -1,60 +1,36 @@
-# :pushpin: 동백씨네마(영화 예매 사이트)
+# 동백씨네마 (Dongbaek Cinema) – 영화 예매 웹앱
 
-## 프로젝트 소개
->사용자는 영화를 예매하고 관리자는 영화 관리, 등록을 할 수있게 개발한 웹 애플리케이션입니다.
-><br>
->홈페이지 링크 : http://192.168.45.200:8080/Movie_DongBaek/ (매일 09:00 ~ 18:00)  
->PPT : https://docs.google.com/presentation/d/17bmeJ3A8eGtZDbLlCavDNTpSxDgNLSxyq8gc9hh2jws/edit?usp=sharing  
+> 사용자는 영화를 예매하고, 관리자는 영화 등록 및 관리를 할 수 있는 웹 애플리케이션입니다.
 
-</br>
+---
 
-## 1. 제작 기간 & 참여 인원
-- 2023.05.17 ~ 2023.06.30
-- 부산 아이티윌 교육센터 - 1차 팀 프로젝트
-- 7명
+### 📌 자료
+- **PPT 보기:** [동백씨네마_PPT.pdf](docs/동백씨네마_PPT.pdf)  
+- **화면 예시:**  
+  ![메인화면](screenshots/main.png)  
+  ![관리자페이지](screenshots/admin.png)
 
-</br>
+---
 
-## 2. 개발환경 & 도구
-#### `개발언어`
-  - Java
-  - JSP
-  - HTML
-  - JavaScript
-  - CSS
-    
-#### `사용기술`
-  - Spring
-  - jQuery
-  - AJAX
-  - JSON
-  - MyBatis
-  - Bootstrap
-    
-#### `서버 & DB`
-  - Apache Tomcat
-  - MySQL
-    
-#### `서버 & DB`
-  - GitHub
-  - Notion
-  - Discord
-  - GoogleDrive
+### 🛠 프로젝트 개요
+- **기간:** 2023‑05‑17 ~ 2023‑06‑30  
+- **팀 구성:** 7명 (부산 ITWILL 교육센터 팀 프로젝트)  
 
-</br>
+### 🔧 기술 스택
+- Java, JSP, HTML, CSS, JavaScript  
+- Spring, MyBatis, jQuery, AJAX, Bootstrap  
+- Apache Tomcat, MySQL  
+- GitHub, Notion, Discord, Google Drive  
 
-## 3. 담당 파트 기능
-  - 관리자 기능
-  - CRUD
-  - 영화 정보와 관련된 기능을 위한 kobis API
-  - 결제와 관련된 기능을 위한 i'mport API  
+---
 
-</br>
+### 🎯 담당 역할
+- 관리자 페이지 CRUD 구현  
+- **KOBIS API** 연동  
+- **I’mport API** 결제 연동  
 
-## 4. 회고 / 느낀점
->처음으로 웹 개발 프로젝트를 하면서 걱정이 많았다.<br>
->수업을 수료한 후에 하는 프로젝트가 아니라, 수업을 들으면서 동시에 진행해야 해서 시간적으로 부족함을 느꼈다.<br>
->하지만 나를 포함한 팀원 모두가 각자 맡은 역할을 잘 해내기 위해 노력하고 협업해서 프로젝트를 마무리할 수 있었다.<br>
->매주 교육센터 강사님들이 제시해 준 개발 과정의 절차를 따라가면서 개발의 전반적인 흐름을 알게 되어 많은 도움이 됐다.<br>
->내가 마주하고 있는 문제는 팀원들에게는 간단하게 해결될 수 있는 부분일 수도 있다는 걸 깨달았고, 팀워크의 중요성을 다시 한 번 느꼈다.<br>
->주석의 중요성도 다시 생각하게 됐고, 다음 프로젝트에서는 공동 코드를 만들어 보는 것도 좋을 것 같다는 생각이 든다.
+---
+
+### ✨ 회고 & 성과
+> Git 브랜치 전략을 활용해 팀 충돌 문제를 해결하고 협업 경험을 쌓았습니다.  
+> API 연동 과정에서 발생한 오류를 분석·해결하며 문제 해결 능력을 강화했습니다.
