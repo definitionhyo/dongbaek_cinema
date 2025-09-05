@@ -12,15 +12,18 @@
 ## 관리자 페이지 회원관리
 
 ### 화면 예시
-<img src="screenshots/dongbaek_admin_movielist.png" width="450" />
-<img src="screenshots/dongbaek_memberInformation.png" width="450" />
-<img src="screenshots/dongbaek_memberDelete.png" width="450" />
+<img src="screenshots/dongbaek_admin_memberlist.png" width="450" />
+- <strong>기능</strong>:
+  - <strong>CRUD</strong>: 회원 관리 기능 (생성, 읽기, 수정, 삭제)
+  - 비회원 버튼 클릭 시 삭제 모달 출력
+  - <strong>검색</strong>: 이름, 아이디, 멤버십으로 검색
+  - 수정, 삭제 시 모달창으로 확인
 
-- **기능:**
-  - **CRUD**: 회원 관리 기능 (생성, 읽기, 수정, 삭제)
-  - **비회원 버튼 클릭 시 삭제 모달 출력**
-  - **검색**: 이름, 아이디, 멤버십으로 검색
-  - **수정, 삭제 시**: 모달창으로 확인
+<img src="screenshots/dongbaek_memberInformation.png" width="450" />
+- <strong>기능</strong>: 회원의 <strong>상세 정보</strong>를 확인하고 수정할 수 있는 페이지입니다.
+
+<img src="screenshots/dongbaek_memberDelete.png" width="450" />
+- <strong>기능</strong>: 회원 정보 삭제 시 <strong>확인 모달</strong>이 출력됩니다.
 
 ---
 
@@ -28,15 +31,13 @@
 
 ### 화면 예시
 <img src="screenshots/dongbaek_admin_movielist.png" width="450" />
-<img src="screenshots/dongbaek_movieRegistration.png" width="450" />
-<img src="screenshots/dongbaek_movieChangeModal.png" width="450" />
+- <strong>기능</strong>: 영화 목록을 표시하고 관리하는 페이지입니다.
 
-- **기능:**
-  - **CRUD**: 영화 관리 기능 (생성, 읽기, 수정, 삭제)
-  - **영화정보 API**: KOBIS API 연동
-  - **등록하기 버튼 클릭 시**: 필수 입력값, 중복 검사 후 등록
-  - **검색**: 영화 제목으로 검색
-  - **수정, 삭제 시**: 모달창으로 확인
+<img src="screenshots/dongbaek_movieRegistration.png" width="450" />
+- <strong>기능</strong>: 영화 <strong>등록</strong> 기능, 필수 입력값 및 중복 검사 후 등록합니다.
+
+<img src="screenshots/dongbaek_movieChangeModal.png" width="450" />
+- <strong>기능</strong>: <strong>영화 정보 수정</strong> 시 모달 창을 사용하여 변경할 수 있습니다.
 
 ---
 
@@ -44,13 +45,10 @@
 
 ### 화면 예시
 <img src="screenshots/dongbaek_payment.png" width="450" />
-<img src="screenshots/dongbaek_accountCancel.png" width="450" />
+- <strong>기능</strong>: 결제 관리 페이지에서 <strong>결제 내역</strong>을 관리합니다.
 
-- **기능:**
-  - **CRUD**: 결제 관리 기능 (생성, 읽기, 수정, 삭제)
-  - **결제취소 API**: I’mport 결제 취소 연동
-  - **검색**: 아이디로 결제 내역 검색
-  - **결제 취소 시**: 모달창으로 확인
+<img src="screenshots/dongbaek_accountCancel.png" width="450" />
+- <strong>기능</strong>: <strong>결제 취소</strong> 기능을 제공하며, 결제 취소 시 확인을 위한 모달창이 나타납니다.
 
 ---
 
@@ -67,9 +65,9 @@
 ---
 
 ### 🎯 담당 역할
-- **관리자 페이지 CRUD 구현**  
-- **KOBIS API** 연동  
-- **I’mport API** 결제 연동  
+- 관리자 페이지 <strong>CRUD 구현</strong>  
+- KOBIS API 연동  
+- I’mport API 결제 연동  
 
 ---
 
