@@ -65,7 +65,7 @@
 ---
 
 ### 🎯 담당 역할
-- 관리자 페이지 <strong>CRUD 구현</strong>  
+- 관리자 페이지 CRUD 구현
 - KOBIS API 연동  
 - I’mport API 결제 연동  
 
