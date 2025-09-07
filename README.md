@@ -34,7 +34,7 @@
 - <strong>기능</strong>: 영화 목록을 표시하고 관리하는 페이지입니다.<br><br>
 
 <img src="screenshots/dongbaek_movieRegistration.png" width="450" /><br>
-- <strong>기능</strong>: 영화 <strong>등록</strong> 기능, 필수 입력값 및 중복 검사 후 등록합니다.<br><br>
+- <strong>기능</strong>: 영화 <strong>등록</strong> 기능, kobis api로 기본정보 가져오고 필수 입력값 및 중복 검사 후 등록합니다.<br><br>
 
 <img src="screenshots/dongbaek_movieChangeModal.png" width="450" /><br>
 - <strong>기능</strong>: <strong>영화 정보 수정</strong> 시 모달 창을 사용하여 변경할 수 있습니다.<br><br>
