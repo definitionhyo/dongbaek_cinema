@@ -48,7 +48,7 @@
 - <strong>기능</strong>: 결제 관리 페이지에서 <strong>결제 내역</strong>을 관리합니다.<br><br>
 
 <img src="screenshots/dongbaek_accountCancel.png" width="450" /><br>
-- <strong>기능</strong>: <strong>결제 취소</strong> 기능을 제공하며, 결제 취소 시 확인을 위한 모달창이 나타납니다.<br><br>
+- <strong>기능</strong>: <strong> api를 사용한 결제 취소</strong> 기능을 제공하며, 결제 취소 시 확인을 위한 모달창이 나타납니다.<br><br>
 
 ---
 
